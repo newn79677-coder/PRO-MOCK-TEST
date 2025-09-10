@@ -56,15 +56,23 @@
             deleteObject
         };
         
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.firebaseFunctions) {
-                initApp();
-            }
-            
-        });
-       
+        // Initialize everything
+document.addEventListener('DOMContentLoaded', () => {
+    setupAutoSubmit();
+    
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+                console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+                console.log('SW registration failed: ', registrationError);
+            });
+    }
+});
     </script>
-
+    
     <style>
         * {
             margin: 0;
