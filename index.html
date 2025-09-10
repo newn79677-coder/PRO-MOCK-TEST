@@ -56,45 +56,15 @@
             deleteObject
         };
         
-        // Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-    setupAutoSubmit();
-    
-    // Service Worker Registration
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('SW registered: ', registration);
-            })
-            .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    }
-});
-  </script>
-<script>
-let deferredPrompt;
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.firebaseFunctions) {
+                initApp();
+            }
+            
+        });
+       
+    </script>
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  
-  // Show install button or prompt
-  const installButton = document.getElementById('install-button');
-  if (installButton) {
-    installButton.style.display = 'block';
-    installButton.addEventListener('click', () => {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted install');
-        }
-        deferredPrompt = null;
-      });
-    });
-  }
-});
-</script>
     <style>
         * {
             margin: 0;
@@ -1432,12 +1402,15 @@ async function loadUserData() {
 </div>
 <body data-theme="dark">
     <!-- App Header -->
-<div class="header-right">
-        <button id="install-button" class="menu-toggle" style="display: none; margin-right: 8px;" title="Install App">
-            📱
-        </button>
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    </div>
+    <header class="app-header">
+        <div class="header-left">
+            <div class="app-logo">📚</div>
+            <h1 class="app-title">Mock Test Pro</h1>
+        </div>
+        <div class="header-right">
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </div>
+        
         <!-- Menu Dropdown -->
         <div class="menu-dropdown" id="menu-dropdown">
             <div class="menu-header">
