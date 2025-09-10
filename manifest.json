@@ -2,21 +2,24 @@
   "name": "Mock Test Pro",
   "short_name": "MockTestPro",
   "description": "Enhanced mock test platform for exam preparation",
-  "start_url": "/",
+  "start_url": ".",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0b1020",
   "theme_color": "#06b6d4",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icon-192x192.png",
+      "src": "https://via.placeholder.com/192x192/06b6d4/ffffff?text=MTP",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512x512.png",
+      "src": "https://via.placeholder.com/512x512/06b6d4/ffffff?text=MTP",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["education", "productivity"]

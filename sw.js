@@ -1,8 +1,8 @@
-const CACHE_NAME = 'mock-test-pro-v3';
+const CACHE_NAME = 'mock-test-pro-v2';
 const urlsToCache = [
   '/',
-  '/index.html',
-  '/manifest.json'
+  './index.html',
+  './manifest.json'
 ];
 
 // Install event - cache resources
@@ -14,10 +14,16 @@ self.addEventListener('install', (event) => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
 });
 
 // Fetch event - serve cached content when offline
 self.addEventListener('fetch', (event) => {
+  // Skip cross-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+  
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -25,9 +31,24 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+        
+        return fetch(event.request).then(response => {
+          // Don't cache if not a valid response
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+          
+          // Clone the response
+          const responseToCache = response.clone();
+          
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+            
+          return response;
+        });
+      })
   );
 });
 
@@ -45,4 +66,5 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim();
 });
