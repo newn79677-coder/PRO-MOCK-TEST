@@ -59,17 +59,7 @@
         // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
     setupAutoSubmit();
-    
-    // Service Worker Registration
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(registration => {
-                console.log('SW registered: ', registration);
-            })
-            .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    }
+   
 });
     </script>
     
@@ -4648,56 +4638,72 @@ function copyToClipboard(selector) {
     }
 }
 
-// Global notification system
-function showNotification(message, type = 'success') {
-    const notification = document.getElementById('notification');
-    const text = document.getElementById('notification-text');
+        // Global notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
 
-    if (!notification || !text) {
-        console.error('Notification elements not found');
-        return;
-    }
+            if (!notification || !text) {
+                console.error('Notification elements not found');
+                return;
+            }
 
-    if (window.notificationTimeout) clearTimeout(window.notificationTimeout);
+            if (window.notificationTimeout) clearTimeout(window.notificationTimeout);
 
-    text.textContent = message;
-    notification.className = `notification ${type} show`;
+            text.textContent = message;
+            notification.className = `notification ${type} show`;
 
-    window.notificationTimeout = setTimeout(() => {
-        notification.classList.remove('show');
-    }, 3000);
-}
-
-        // Initialize everything
-        document.addEventListener('DOMContentLoaded', () => {
-            setupAutoSubmit();
-        });
-        
-    </script>
-    <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const checkbox = document.getElementById('force-time-mode');
-    const minutesInput = document.getElementById('force-time-minutes');
-
-    if (checkbox && minutesInput) {
-        checkbox.addEventListener('change', () => {
-            minutesInput.disabled = !checkbox.checked;
-        });
-    }
-});
-
-// Use this function when starting the test to get the value:
-function getForcedTimeMinutes() {
-    const checkbox = document.getElementById('force-time-mode');
-    const minutesInput = document.getElementById('force-time-minutes');
-    if (checkbox && checkbox.checked && minutesInput) {
-        const val = parseInt(minutesInput.value, 10);
-        if (!isNaN(val) && val >= 1 && val <= 10) {
-            return val;
+            window.notificationTimeout = setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
-    }
-    return null; // not forced
-}
-</script>
+
+        // Force time mode functionality
+        function getForcedTimeMinutes() {
+            const checkbox = document.getElementById('force-time-mode');
+            const minutesInput = document.getElementById('force-time-minutes');
+            if (checkbox && checkbox.checked && minutesInput) {
+                const val = parseInt(minutesInput.value, 10);
+                if (!isNaN(val) && val >= 1 && val <= 10) {
+                    return val;
+                }
+            }
+            return null; // not forced
+        }
+
+        // Service Worker Registration
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup auto-submit (assuming this function exists elsewhere)
+            if (typeof setupAutoSubmit === 'function') {
+                setupAutoSubmit();
+            }
+
+            // Setup force time mode checkbox
+            const checkbox = document.getElementById('force-time-mode');
+            const minutesInput = document.getElementById('force-time-minutes');
+
+            if (checkbox && minutesInput) {
+                checkbox.addEventListener('change', () => {
+                    minutesInput.disabled = !checkbox.checked;
+                });
+            }
+
+            // Register service worker
+            registerServiceWorker();
+        });
+    </script>
 </body>
-</html> 
+</html>
