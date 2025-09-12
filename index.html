@@ -2,13 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mock Test Pro - Enhanced</title>
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#06b6d4" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- PASTE ALL THE ICON CODE RIGHT HERE ↓ -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- END OF ICON CODE ↑ -->
     <!-- Firebase SDKs v12 -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js';
@@ -56,13 +73,15 @@
             deleteObject
         };
         
-        // Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-    setupAutoSubmit();
-   
-});
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.firebaseFunctions) {
+                initApp();
+            }
+            
+        });
+       
     </script>
-    
+
     <style>
         * {
             margin: 0;
@@ -4638,72 +4657,161 @@ function copyToClipboard(selector) {
     }
 }
 
-        // Global notification system
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const text = document.getElementById('notification-text');
+// Global notification system
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const text = document.getElementById('notification-text');
 
-            if (!notification || !text) {
-                console.error('Notification elements not found');
-                return;
-            }
+    if (!notification || !text) {
+        console.error('Notification elements not found');
+        return;
+    }
 
-            if (window.notificationTimeout) clearTimeout(window.notificationTimeout);
+    if (window.notificationTimeout) clearTimeout(window.notificationTimeout);
 
-            text.textContent = message;
-            notification.className = `notification ${type} show`;
+    text.textContent = message;
+    notification.className = `notification ${type} show`;
 
-            window.notificationTimeout = setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+    window.notificationTimeout = setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
 
-        // Force time mode functionality
-        function getForcedTimeMinutes() {
-            const checkbox = document.getElementById('force-time-mode');
-            const minutesInput = document.getElementById('force-time-minutes');
-            if (checkbox && checkbox.checked && minutesInput) {
-                const val = parseInt(minutesInput.value, 10);
-                if (!isNaN(val) && val >= 1 && val <= 10) {
-                    return val;
-                }
-            }
-            return null; // not forced
-        }
-
-        // Service Worker Registration
-        function registerServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            }
-        }
-
-        // Initialize everything when DOM is loaded
+        // Initialize everything
         document.addEventListener('DOMContentLoaded', () => {
-            // Setup auto-submit (assuming this function exists elsewhere)
-            if (typeof setupAutoSubmit === 'function') {
-                setupAutoSubmit();
-            }
-
-            // Setup force time mode checkbox
-            const checkbox = document.getElementById('force-time-mode');
-            const minutesInput = document.getElementById('force-time-minutes');
-
-            if (checkbox && minutesInput) {
-                checkbox.addEventListener('change', () => {
-                    minutesInput.disabled = !checkbox.checked;
-                });
-            }
-
-            // Register service worker
-            registerServiceWorker();
+            setupAutoSubmit();
         });
+        
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const checkbox = document.getElementById('force-time-mode');
+    const minutesInput = document.getElementById('force-time-minutes');
+
+    if (checkbox && minutesInput) {
+        checkbox.addEventListener('change', () => {
+            minutesInput.disabled = !checkbox.checked;
+        });
+    }
+});
+
+// Use this function when starting the test to get the value:
+function getForcedTimeMinutes() {
+    const checkbox = document.getElementById('force-time-mode');
+    const minutesInput = document.getElementById('force-time-minutes');
+    if (checkbox && checkbox.checked && minutesInput) {
+        const val = parseInt(minutesInput.value, 10);
+        if (!isNaN(val) && val >= 1 && val <= 10) {
+            return val;
+        }
+    }
+    return null; // not forced
+}
+</script>
+
+<!-- ONLY include the install button here. The script is in pwabanner.js -->
+<button id="installButton" style="display: none; position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px; background: #06b6d4; color: white; border: none; border-radius: 5px; cursor: pointer;">Install App</button>
+
+<script src="pwabanner.js"></script>
+<!-- Other scripts above -->
+
+<script>
+  // Paste your entire service worker registration script here
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('SW registered: ', registration);
+
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                showUpdateAvailableNotification();
+              }
+            });
+          });
+
+          navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
+              showUpdateAvailableNotification();
+            }
+          });
+        })
+        .catch((registrationError) => {
+          console.log('SW registration failed: ', registrationError);
+        });
+    });
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload();
+    });
+  }
+
+  function showUpdateAvailableNotification() {
+    if (confirm('A new version of Mock Test Pro is available. Would you like to update?')) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    }
+  }
+
+  function cacheQuizData(quizData) {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({
+        type: 'CACHE_QUIZ_DATA',
+        payload: quizData
+      });
+    }
+  }
+
+  function handleOfflineSubmission(quizSubmission) {
+    const pendingSubmissions = JSON.parse(localStorage.getItem('pendingSubmissions') || '[]');
+    pendingSubmissions.push({
+      id: Date.now().toString(),
+      ...quizSubmission,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('pendingSubmissions', JSON.stringify(pendingSubmissions));
+
+    if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+      navigator.serviceWorker.ready.then((registration) => {
+        return registration.sync.register('quiz-submission');
+      });
+    }
+  }
+
+  function handleOfflineResults(testResults) {
+    const pendingResults = JSON.parse(localStorage.getItem('pendingResults') || '[]');
+    pendingResults.push({
+      id: Date.now().toString(),
+      ...testResults,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('pendingResults', JSON.stringify(pendingResults));
+
+    if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+      navigator.serviceWorker.ready.then((registration) => {
+        return registration.sync.register('test-results');
+      });
+    }
+  }
+
+  function updateOnlineStatus() {
+    const isOnline = navigator.onLine;
+    document.body.classList.toggle('offline', !isOnline);
+
+    const offlineIndicator = document.getElementById('offline-indicator');
+    if (offlineIndicator) {
+      offlineIndicator.style.display = isOnline ? 'none' : 'block';
+    }
+
+    console.log(isOnline ? 'App is online' : 'App is offline');
+  }
+
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+
+  updateOnlineStatus();
+</script>
+
 </body>
 </html>
